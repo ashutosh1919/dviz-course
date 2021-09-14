@@ -9,7 +9,7 @@ jobs:
     # Map a step output to a job output
     outputs:
       all: ${{ steps.changes.outputs.all}}
-      ts: ${{ steps.changes.outputs.ipynb }}
+      ipynb: ${{ steps.changes.outputs.ipynb }}
     steps:
         # Make sure we have some code to diff.
       - name: Checkout repository
@@ -28,7 +28,7 @@ jobs:
     # Set the type of machine to run on
     runs-on: ubuntu-latest
     # Run workflow only if changed files include any ipynb files.
-    if: ${{needs.changedfiles.outputs.ipynb}}
+    # if: ${{needs.changedfiles.outputs.ipynb}}
 
     steps:
       - name: Checkout code
@@ -48,5 +48,5 @@ jobs:
           jupyter kernelspec list
           pip install nbmake pytest-xdist nbconvert remotezip
           python -m spacy download en_core_web_sm
-          jupyter nbconvert --ClearMetadataPreprocessor.enabled=True --inplace **/**.ipynb
-          pytest --nbmake -n=auto ./
+          jupyter nbconvert --ClearMetadataPreprocessor.enabled=True --inplace ${{needs.changedfiles.outputs.ipynb}}
+          pytest --nbmake -n=auto ${{needs.changedfiles.outputs.ipynb}}
