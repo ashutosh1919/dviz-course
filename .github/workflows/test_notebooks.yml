@@ -18,8 +18,8 @@ jobs:
         id: changes
         # Set outputs using the command.
         run: |
-          echo "::set-output name=all::$(git diff --name-only --diff-filter=ACMRT | xargs)"
-          echo "::set-output name=ipynb::$(git diff --name-only --diff-filter=ACMRT | grep .ipynb$ | xargs)"
+          echo "::set-output name=all::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | xargs)"
+          echo "::set-output name=ipynb::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.pull_request.base.sha }} ${{ github.sha }} | grep .ipynb$ | xargs)"
   
   displayops:
     runs-on: ubuntu-latest
