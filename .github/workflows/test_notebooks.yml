@@ -18,8 +18,8 @@ jobs:
         id: changes
         # Set outputs using the command.
         run: |
-          echo "::set-output name=all::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.push.base.sha }} ${{ github.sha }} | xargs)"
-          echo "::set-output name=ipynb::$(git diff --name-only --diff-filter=ACMRT ${{ github.event.push.base.sha }} ${{ github.sha }} | grep .ipynb$ | xargs)"
+          echo "::set-output name=all::$(git diff --name-only --diff-filter=ACMRT | xargs)"
+          echo "::set-output name=ipynb::$(git diff --name-only --diff-filter=ACMRT | grep .ipynb$ | xargs)"
 
   # Set the job key
   test-notebooks:
@@ -29,7 +29,7 @@ jobs:
     runs-on: ubuntu-latest
     # Run workflow only if changed files include any ipynb files.
     needs: changedfiles
-    # if: ${{needs.changedfiles.outputs.ipynb}}
+    if: ${{needs.changedfiles.outputs.ipynb}}
 
     steps:
       - name: Checkout code
